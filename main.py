@@ -36,7 +36,7 @@ def main():
         # Generate summaries using LangChain
         data_with_summaries = generate_summaries(normalized_data)
 
-        # Save summaries to feeds table
+        # Save summaries to pulses summary table
         save_summaries(conn, data_with_summaries)
 
         print(f"Successfully processed {len(data_with_summaries)} records.")

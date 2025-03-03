@@ -56,45 +56,34 @@ def retrieve_pulse_information(conn: connection) -> list[dict]:
 
 def save_summaries(conn: connection, summaries: list[dict]) -> bool:
     cursor = conn.cursor()
-
+    
     try:
         for i, row in enumerate(summaries):
             query = """
-                INSERT INTO
-                    feeds
-                        (
-                            content,
-                            pulse_id,
-                            organization_id,
-                            user_id
-                        )
-                VALUES
-                    (
-                        %s,
-                        %s,
-                        %s, 
-                        %s
-                    )
+            UPDATE
+                pulses
+            SET
+                summary = %s,
+                updated_at = NOW()
+            WHERE
+                id = %s
             """
-
+            
             try:
                 cursor.execute(
-                    query,
+                    query, 
                     (
-                        row["summary"],
-                        row["pulse_id"],
-                        row["organization_id"],
-                        row["user_id"],
-                    ),
+                        row['summary'],
+                        row['pulse_id']
+                    )
                 )
+                print(f"Saved summary {i + 1} of {len(summaries)}")
             except Exception as e:
-                print(f"Error saving summary to database: {e}")
-            print(f"Saved summary {i + 1} of {len(summaries)}")
-
+                print(f"Error updating summary in database: {e}")
+        
         conn.commit()
         cursor.close()
         print(f"Successfully saved {len(summaries)} summaries.")
-        
         return True
     except Exception as e:
         print(f"[database.py -> save_summaries] Unable to save summaries, {str(e)}")
