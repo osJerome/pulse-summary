@@ -64,10 +64,10 @@ python main.py
 
 The application will:
 1. Connect to your PostgreSQL database
-2. Fetch relevant data from the notifications and messages tables
+2. Fetch relevant data from the `notifications` and `messages` tables
 3. Normalize the data
 4. Generate concise summaries using OpenAI via LangChain
-5. Save the summaries to the feeds table in your database
+5. Save the summaries to the `pulses` table in your database
 
 ## Project Structure
 
