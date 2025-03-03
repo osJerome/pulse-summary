@@ -12,11 +12,10 @@ load_dotenv()
 def main():
     # Connect to database
     conn = connect_database(
+        host=getenv("DB_HOST"),
         name=getenv("DB_NAME"),
         user=getenv("DB_USER"),
         password=getenv("DB_PASSWORD"),
-        host=getenv("DB_HOST"),
-        port=getenv("DB_PORT"),
     )
     if not conn:
         return
@@ -36,8 +35,8 @@ def main():
         # Generate summaries using LangChain
         data_with_summaries = generate_summaries(normalized_data)
 
-        # Save summaries to pulses summary table
-        save_summaries(conn, data_with_summaries)
+        # Save summaries to pulses summary table; disable for testing
+        # save_summaries(conn, data_with_summaries)
 
         print(f"Successfully processed {len(data_with_summaries)} records.")
 
