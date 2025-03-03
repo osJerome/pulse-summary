@@ -1,0 +1,4 @@
+langchain_community
+langchain_openai
+psycopg2-binary
+python-dotenv
