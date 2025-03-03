@@ -3,14 +3,13 @@ from psycopg2.extras import RealDictCursor
 from psycopg2.extensions import connection
 
 
-def connect_database(name: str, user: str, password: str, host: str, port: int) -> connection | None:
+def connect_database(name: str, user: str, password: str, host: str) -> connection | None:
     try:
         conn = psycopg2.connect(
             dbname=name,
             user=user,
             password=password,
             host=host,
-            port=port,
         )
         
         return conn
