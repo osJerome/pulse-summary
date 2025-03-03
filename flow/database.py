@@ -22,23 +22,30 @@ def retrieve_pulse_information(conn: connection) -> list[dict]:
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     
     # CONTEXT: The query will retrieve the required pulse contextual information for summarization
-    # TODO: These pulse information SHOULD be batched; the order MUST follow by the hour of its created date
-
+    # Fetch only records created within the previous hour
+    # Example: If the current time is 2021-09-01 12:00:00, the query will fetch records created between 2021-09-01 11:00:00 and 2021-09-01 12:00:00
+    
     query = """
         SELECT
             n.description,
             n.pulse_id,
-            n.organization_id, 
-            m.content
-        AS
-            message_content,
-            m.user_id
+            n.organization_id,
+            m.content AS message_content,
+            m.user_id,
+            n.created_at AS notification_created_at,
+            m.created_at AS message_created_at
         FROM
             notifications n
         JOIN
             messages m
         ON
             n.organization_id = m.organization_id
+        WHERE
+            -- Filter for records created within the previous hour
+            DATE_TRUNC('hour', n.created_at) = DATE_TRUNC('hour', CURRENT_TIMESTAMP - INTERVAL '1 hour')
+            AND DATE_TRUNC('hour', m.created_at) = DATE_TRUNC('hour', CURRENT_TIMESTAMP - INTERVAL '1 hour')
+        ORDER BY
+            n.created_at ASC
     """
 
     try:
