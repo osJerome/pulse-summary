@@ -26,7 +26,6 @@ def generate_summaries(normalized_data: list[dict]) -> list:
     for row in normalized_data:
         combined_text = (
             f"Description: {row.get('description', '')}\n"
-            f"Metadata: {row.get('metadata', '')}\n"
             f"Message: {row.get('message_content', '')}"
         )
 
